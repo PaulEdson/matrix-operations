@@ -2,15 +2,34 @@ import random
 import numpy as np
 
 class matrix:
-    # takes in rows and columns and creates a random matrix with those dimensions
-    def __init__(self, rows, cols):
+    def __init__(self, passedList, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.__nums = np.array([], dtype= 'f')
-        for i in range(rows*cols):
-            self.__nums = np.append(self.__nums, random.randint(0,10))
+        self.__nums = passedList #np.array([], dtype= 'f')
+        self.__nums = np.array(self.__nums, dtype = 'f')
         self.__matrix = self.__nums.reshape(rows, cols)
 
+    #initializes matrix with random numbers between 1-10
+    @classmethod
+    def random(cls, rows, cols):
+        numList = []
+        for i in range(rows*cols):
+            numList.append(random.randint(1, 10))
+        return cls(numList, rows, cols)
+
+    @classmethod
+    def fromFile(cls, file):
+        f = open(file, 'r')
+        list = eval(f.read())
+        f.close()
+        if(list[0]):
+            rows = len(list)
+        if(list[0][0]):
+            cols = len(list[0])
+        list = np.array(list)
+        list = list.reshape(-1)
+        return cls(list, rows, cols)
+    
     #calling this method returns private matrix data
     def getMatrix(self):
         return self.__matrix
@@ -41,7 +60,7 @@ class matrix:
     #any matrix can have an inverse
     def getInverse(self):
         return np.linalg.inv(self.__matrix)
- 
+
     #does not work for non-square matrices
     def eigenDecomp(self):
         return np.linalg.eig(self.__matrix)
@@ -50,13 +69,14 @@ class matrix:
         f = open('./matrixFile.txt', 'w')
         f.write(str(self.__matrix.tolist()))
         f.close()
-    
+
     def readFromFile(self):
         f = open('matrixFile.txt', 'r')
         self.readArray = np.array((eval(f.read())))
         f.close()
-Matrix1 = matrix(3, 3)
-Matrix1.saveToFile()
-Matrix1.readFromFile()
-print(Matrix1.readArray)
-print(Matrix1.getMatrix())
+# Matrix1 = matrix([1,2,3,4,5,6,7,8,9], 3, 3)
+# Matrix2 = matrix.random(3, 3)
+# print(Matrix1.getMatrix())
+# print(Matrix2.getMatrix())
+Matrix3 = matrix.fromFile('matrixFile.txt')
+print(Matrix3.getMatrix())
