@@ -12,6 +12,19 @@ class matrix:
         self.__nums = np.array(self.__nums, dtype = 'f')
         self.__matrix = self.__nums.reshape(self.__rows, self.__cols)
 
+    #can pass generated arrays into this classmethod to create new matrix objects
+    @classmethod
+    def fromArray(cls, arr):
+        arr = np.array(arr)
+        try:
+            rows = arr.shape[0]
+            cols = arr.shape[1]
+        except:
+            ('passed array was in the incorrect format (must be a 2D array)')
+            return
+        list = arr.reshape(-1)
+        return cls(list, rows, cols)
+
     #initializes matrix with random numbers between 1-10
     @classmethod
     def random(cls, rows, cols):
@@ -93,15 +106,19 @@ class matrix:
 
     #any matrix can have an inverse
     def getInverse(self):
-        return np.linalg.inv(self.__matrix)
+        try:
+            return np.linalg.inv(self.__matrix)
+        except:
+            print("determinant is zero: invalid inverse target")
+            return
 
     #does not work for non-square matrices
     def eigenDecomp(self):
         return np.linalg.eig(self.__matrix)
 
     #saves matrix to file. Currently overwrites anything else on file.
-    def saveToFile(self):
-        f = open('./matrixFile.txt', 'w')
+    def saveToFile(self, file):
+        f = open(file, 'w')
         f.write(str(self.__matrix.tolist()))
         f.close()
 
@@ -112,7 +129,3 @@ class matrix:
 
 
 
-matrix1 = matrix.random(3,3)
-print(matrix1.getMatrix())
-matrix1.setMatrix(matrix1.getInverse())
-matrix1.toHeatMap()
