@@ -1,13 +1,16 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 class matrix:
+    #most basic constructor that all initializing class methods call
     def __init__(self, passedList, rows, cols):
-        self.rows = rows
-        self.cols = cols
-        self.__nums = passedList #np.array([], dtype= 'f')
+        self.__rows = rows
+        self.__cols = cols
+        self.__nums = passedList
         self.__nums = np.array(self.__nums, dtype = 'f')
-        self.__matrix = self.__nums.reshape(rows, cols)
+        self.__matrix = self.__nums.reshape(self.__rows, self.__cols)
 
     #initializes matrix with random numbers between 1-10
     @classmethod
@@ -16,23 +19,54 @@ class matrix:
         for i in range(rows*cols):
             numList.append(random.randint(1, 10))
         return cls(numList, rows, cols)
-
+    
+    #read matrix from text file
     @classmethod
     def fromFile(cls, file):
         f = open(file, 'r')
-        list = eval(f.read())
+        try:
+            list = eval(f.read())
+        except:
+            print("passed file is not in the correct format. Pass in an array of the format [[],[]]")
+            f.close()
+            return
         f.close()
-        if(list[0]):
-            rows = len(list)
-        if(list[0][0]):
-            cols = len(list[0])
         list = np.array(list)
+        try:
+            rows = list.shape[0]
+            cols = list.shape[1]
+        except:
+            print('Pass in a matrix of the format [[1,2],[3,4]] or [[1, 2, 3]] if 1 dimensional')
+            return
         list = list.reshape(-1)
         return cls(list, rows, cols)
     
-    #calling this method returns private matrix data
+    #initializes matrix as identity matrix. needs a given dimension
+    @classmethod
+    def identity(cls, rows):
+        numList = []
+        for i in range(rows):
+            for j in range(rows):
+                if(j==i):
+                    numList.append(1)
+                else:
+                    numList.append(0)
+        return cls(numList, rows, rows)
+    
+    #initialize matrix as zero matrix when called, takes rows and columns as arguments
+    @classmethod
+    def zero(cls, rows, cols):
+        numList = []
+        for i in range(rows*cols):
+            numList.append(0)
+        return cls(numList, rows, cols)
+
+    #getter and setter methods
     def getMatrix(self):
         return self.__matrix
+
+    def getDimmensions(self):
+        return [self.__rows, self.__cols]
 
     def setMatrix(self, passedMatrix):
         self.__matrix = passedMatrix
@@ -65,18 +99,20 @@ class matrix:
     def eigenDecomp(self):
         return np.linalg.eig(self.__matrix)
 
+    #saves matrix to file. Currently overwrites anything else on file.
     def saveToFile(self):
         f = open('./matrixFile.txt', 'w')
         f.write(str(self.__matrix.tolist()))
         f.close()
 
-    def readFromFile(self):
-        f = open('matrixFile.txt', 'r')
-        self.readArray = np.array((eval(f.read())))
-        f.close()
-# Matrix1 = matrix([1,2,3,4,5,6,7,8,9], 3, 3)
-# Matrix2 = matrix.random(3, 3)
-# print(Matrix1.getMatrix())
-# print(Matrix2.getMatrix())
-Matrix3 = matrix.fromFile('matrixFile.txt')
-print(Matrix3.getMatrix())
+    #displays matrix as a heatmap using seaborn
+    def toHeatMap(self):
+        sns.heatmap(self.__matrix, cmap='viridis', annot=True)
+        plt.show()
+
+
+
+matrix1 = matrix.random(3,3)
+print(matrix1.getMatrix())
+matrix1.setMatrix(matrix1.getInverse())
+matrix1.toHeatMap()
