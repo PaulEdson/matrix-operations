@@ -87,14 +87,22 @@ class matrix:
     #passedMatrix must be a matrix class object
     #add and subtract matrices must be of the same dimensions
     def addMatrix(self, passedMatrix):
-        return np.add(self.__matrix, passedMatrix.getMatrix())
-
+        try:
+            return matrix.fromArray(np.add(self.__matrix, passedMatrix.getMatrix()).tolist())
+        except ValueError:
+            print("These matrices cannot be added")
     def subtractMatrix(self, passedMatrix):
-        return np.subtract(self.__matrix, passedMatrix.getMatrix())
+        try:
+            return matrix.fromArray(np.subtract(self.__matrix, passedMatrix.getMatrix()).tolist())
+        except ValueError:
+            print("matrices must be of the same shape to be added or subtracted")
 
     #matrices can only be multiplied if the length of rowsA matches columnsB
     def multiplyMatrix(self, passedMatrix):
-        return np.dot(self.__matrix, passedMatrix.getMatrix())
+        try:
+            return matrix.fromArray(np.dot(self.__matrix, passedMatrix.getMatrix()).tolist())
+        except ValueError:
+            print("the length of Matrix A's columns must match the length of Matrix B's rows for matrix multiplication")
 
     #any matrix can be transposed
     def transpose(self):
