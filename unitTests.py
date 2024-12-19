@@ -112,9 +112,11 @@ class TestMatrixMethods(unittest.TestCase):
         self.assertRaises(ValueError)
     
     #Testing to make sure no errors are thrown when given good data
+    #tests that decomposition is equal to original matrix
     def testEigenDecomp(self):
         myMatrix1 = matrix.matrix.random(3, 3)
-        myMatrix1.eigenDecomp()
+        R, D, Rinverse = myMatrix1.eigenDecomp()
+        self.assertAlmostEqual(R.multiplyMatrix(D.multiplyMatrix(Rinverse)).getMatrix().all(), myMatrix1.getMatrix().all())
     
     #ValueError should be raised when non-zero matrix is passed to matrix.eigenDecomp
     def testEigenDecompIncorrectShape(self):

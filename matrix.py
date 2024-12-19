@@ -34,6 +34,7 @@ class matrix:
         return cls(numList, rows, cols)
     
     #read matrix from text file
+    #stored matrices are in python list format, so eval can be used
     @classmethod
     def fromFile(cls, file):
         f = open(file, 'r')
@@ -142,9 +143,14 @@ class matrix:
             return
     
     #does not work for non-square matrices
+    #returns the decomposition matrices that when multiplied should equal the original matrix
     def eigenDecomp(self):
         try:
-            return np.linalg.eig(self.__matrix)
+            eigValues, eigVectors = np.linalg.eig(self.__matrix)
+            D = matrix.fromArray(np.diag(eigValues).tolist())
+            R = matrix.fromArray(eigVectors)
+            Rinverse = R.getInverse()
+            return R, D, Rinverse
         except ValueError:
             if(self.__matrix.shape[0] != self.__matrix.shape[1]):
                 print("Must pass in square matrix for eigen decomposition calculation")
@@ -166,3 +172,4 @@ class matrix:
         sns.heatmap(self.__matrix, cmap='viridis', annot=True)
         plt.show()
 
+matrix1 = matrix.random(3,4,5)
