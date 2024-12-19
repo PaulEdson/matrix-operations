@@ -114,8 +114,11 @@ class TestMatrixMethods(unittest.TestCase):
     #Testing to make sure no errors are thrown when given good data
     #tests that decomposition is equal to original matrix
     def testEigenDecomp(self):
-        myMatrix1 = matrix.matrix.random(3, 3)
-        R, D, Rinverse = myMatrix1.eigenDecomp()
+        #added loop to remake the matrix if it creates onw with no determinate and an invalid inverse
+        R, D, Rinverse = [None, None, None]
+        while Rinverse == None:
+            myMatrix1 = matrix.matrix.random(3, 3)
+            R, D, Rinverse = myMatrix1.eigenDecomp()
         self.assertAlmostEqual(R.multiplyMatrix(D.multiplyMatrix(Rinverse)).getMatrix().all(), myMatrix1.getMatrix().all())
     
     #ValueError should be raised when non-zero matrix is passed to matrix.eigenDecomp

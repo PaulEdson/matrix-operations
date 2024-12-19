@@ -143,7 +143,7 @@ class matrix:
             return
     
     #does not work for non-square matrices
-    #returns the decomposition matrices that when multiplied should equal the original matrix
+    #returns the eigen decomposition matrices that when multiplied should equal the original matrix
     def eigenDecomp(self):
         try:
             eigValues, eigVectors = np.linalg.eig(self.__matrix)
@@ -172,4 +172,3 @@ class matrix:
         sns.heatmap(self.__matrix, cmap='viridis', annot=True)
         plt.show()
 
-matrix1 = matrix.random(3,4,5)
