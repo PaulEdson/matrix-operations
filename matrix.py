@@ -96,8 +96,10 @@ class matrix:
             return matrix.fromArray(np.subtract(self.__matrix, passedMatrix.getMatrix()).tolist())
         except ValueError:
             print("matrices must be of the same shape to be added or subtracted")
+            return
 
     #matrices can only be multiplied if the length of rowsA matches columnsB
+    #returns a matrix object
     def multiplyMatrix(self, passedMatrix):
         try:
             return matrix.fromArray(np.dot(self.__matrix, passedMatrix.getMatrix()).tolist())
@@ -105,24 +107,53 @@ class matrix:
             print("the length of Matrix A's columns must match the length of Matrix B's rows for matrix multiplication")
 
     #any matrix can be transposed
+    #returns a matrix object
     def transpose(self):
-        return np.transpose(self.__matrix)
+        return matrix.fromArray(np.transpose(self.__matrix).tolist())
 
     #only calculable for square matrices
+    #returns a number (float or int)
     def getDeterminant(self):
-        return np.linalg.det(self.__matrix)
-
-    #any matrix can have an inverse
+        try:
+            return np.linalg.det(self.__matrix)
+        except ValueError:
+            if (self.__matrix.shape[0] != self.__matrix.shape[1]):
+                print("Must pass in square matrix for determinant calculation")
+            else:
+                print(Exception)
+            return
+        except Exception as e:
+            print(e)
+            return
+        
+    #only calculable for square matrices
+    #returns matrix object
     def getInverse(self):
         try:
-            return np.linalg.inv(self.__matrix)
-        except:
-            print("determinant is zero: invalid inverse target")
+            return matrix.fromArray(np.linalg.inv(self.__matrix).tolist())
+        except ValueError:
+            if(self.__matrix.shape[0] != self.__matrix.shape[1]):
+                print("Must pass in square matrix for inverse calculation")
+            elif(self.getDeterminant() == 0):
+                print("determinant is zero: invalid inverse target")
             return
-
+        except Exception as e:
+            print(e)
+            return
+    
     #does not work for non-square matrices
     def eigenDecomp(self):
-        return np.linalg.eig(self.__matrix)
+        try:
+            return np.linalg.eig(self.__matrix)
+        except ValueError:
+            if(self.__matrix.shape[0] != self.__matrix.shape[1]):
+                print("Must pass in square matrix for eigen decomposition calculation")
+            else:
+                print(Exception)
+            return
+        except Exception as e:
+            print(e)
+            return
 
     #saves matrix to file. Currently overwrites anything else on file.
     def saveToFile(self, file):
@@ -134,6 +165,4 @@ class matrix:
     def toHeatMap(self):
         sns.heatmap(self.__matrix, cmap='viridis', annot=True)
         plt.show()
-
-
 

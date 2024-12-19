@@ -69,6 +69,49 @@ class TestMatrixMethods(unittest.TestCase):
         multMatrix = myMatrix1.multiplyMatrix(myMatrix2)
         self.assertRaises(ValueError)
     
+    def testTranspose(self):
+        myMatrix1 = matrix.matrix.random(2, 3)
+        myMatrix2 = myMatrix1.transpose()
+        for row in range(len(myMatrix1.getMatrix())):
+            for col in range(len(myMatrix1.getMatrix()[row])):
+                self.assertEqual(myMatrix1.getMatrix()[row][col], myMatrix2.getMatrix()[col][row])
+    
+    def testDeterminate(self):
+        myMatrix1 = matrix.matrix.random(4, 4)
+        determinate = myMatrix1.getDeterminant()
+        self.assertFalse(type(determinate) is None)
+    
+    def testDeterminateIncorrectParam(self):
+        myMatrix1 = matrix.matrix.random(3, 4)
+        determinate = myMatrix1.getDeterminant()
+        self.assertRaises(ValueError)
+    
+    def testInverse(self):
+        myMatrix1 = matrix.matrix([1, 2, 3, 4, 5, 6, 6, 8, 9], 3, 3)
+        myInverseMatrix = myMatrix1.getInverse()
+        productMatrix = myMatrix1.multiplyMatrix(myInverseMatrix)
+        identityMatrix = matrix.matrix.identity(3)
+        self.assertAlmostEqual(productMatrix.getMatrix().all(), identityMatrix.getMatrix().all())
+    
+    def testInverseZeroDet(self):
+        myMatrix1 = matrix.matrix([1,2,3,4,5,6,7,8,9],3,3)
+        myMatrix1.getInverse()
+        self.assertRaises(ValueError)
+    
+    def testInverseIncorrectShape(self):
+        myMatrix1 = matrix.matrix.random(1,5)
+        myMatrix1.getInverse()
+        self.assertRaises(ValueError)
+    
+    def testEigenDecomp(self):
+        myMatrix1 = matrix.matrix.random(3, 3)
+        myMatrix1.eigenDecomp()
+    
+    def testEigenDecompIncorrectShape(self):
+        myMatrix1 = matrix.matrix.random(4,3)
+        myMatrix1.eigenDecomp()
+        self.assertRaises(ValueError)
+    
     
 if __name__ == "__main__":
     unittest.main()
