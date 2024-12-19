@@ -19,8 +19,8 @@ class matrix:
         try:
             rows = arr.shape[0]
             cols = arr.shape[1]
-        except:
-            ('passed array was in the incorrect format (must be a 2D array)')
+        except Exception as e:
+            print("2D array should be passed into this method")
             return
         list = arr.reshape(-1)
         return cls(list, rows, cols)
