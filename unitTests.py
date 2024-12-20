@@ -119,7 +119,9 @@ class TestMatrixMethods(unittest.TestCase):
         while Rinverse == None:
             myMatrix1 = matrix.matrix.random(3, 3)
             R, D, Rinverse = myMatrix1.eigenDecomp()
-        self.assertAlmostEqual(R.multiplyMatrix(D.multiplyMatrix(Rinverse)).getMatrix().all(), myMatrix1.getMatrix().all())
+        print(myMatrix1.getMatrix())
+        print(R.multiplyMatrix(D.multiplyMatrix(Rinverse)).getMatrix())
+        self.assertAlmostEqual(Rinverse.multiplyMatrix(R.multiplyMatrix(D)).getMatrix().all(), myMatrix1.getMatrix().all())
     
     #ValueError should be raised when non-zero matrix is passed to matrix.eigenDecomp
     def testEigenDecompIncorrectShape(self):

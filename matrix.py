@@ -2,6 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import re
 
 class matrix:
     #most basic constructor that all initializing class methods call
@@ -39,13 +40,25 @@ class matrix:
     def fromFile(cls, file):
         f = open(file, 'r')
         try:
-            list = eval(f.read())
-        except:
+            userInput = f.read()
+            userInput.strip()
+            userInput = userInput [1:-1]
+            rows = re.findall(r'\[(.*?)\]', userInput)
+            col = rows[0].split(',')
+            matrixRow = []
+            matrixList = []
+            for row in rows:
+                for col in row.split(','):
+                    matrixRow.append(float(col))
+                matrixList.append(matrixRow)
+                matrixRow = []
+        except Exception as e:
+            print(e)
             print("passed file is not in the correct format. Pass in an array of the format [[],[]]")
             f.close()
             return
         f.close()
-        list = np.array(list)
+        list = np.array(matrixList)
         try:
             rows = list.shape[0]
             cols = list.shape[1]
@@ -171,4 +184,5 @@ class matrix:
     def toHeatMap(self):
         sns.heatmap(self.__matrix, cmap='viridis', annot=True)
         plt.show()
+
 
