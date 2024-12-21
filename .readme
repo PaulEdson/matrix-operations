@@ -1,0 +1,37 @@
+Matrix manager structure:
+-matrix.py contains the matrix class which wraps matrices within objects
+-any matrix operation that returns a matrix returns it as a matrix object
+-unit tests contained within unitTests.py
+-unit tests are separated between two classes, one for userCalculator.py, one for matrix.py
+-userCalculator import matrix class and uses its methods to perform all matrix functions.
+
+Running the code:
+-To run this code, run the userCalculator.py script. 
+
+Using the app:
+-after running the code, you will be asked to enter a matrix
+-type "help" for a list of all commands
+-matrices can be entered as 2d lists in the command line or as a file eg. [[1,2,3],[1,4,5],[5,5,5]] or matrixFile.txt
+-if entered as a file, run the command from the directory the file is in, or provide the path
+-saved matrices are stored in a file called savedMatrix.txt in the directory you run the program from
+
+list of available commands:
+-matrix generation commands:
+    -"random" - generates a matrix given shape and populates it with random integers between 1-10 
+        -example command: random:3 3
+    
+    -"identity" - generates an identity matrix given a size
+        -example command: identity:7
+    
+-Matrix manipulation commands:
+*after inputing a matrix, you will be asked if you want to perform any operations. Any of the following can be run
+    - "+" - add a matrix to the existing matrix. Will prompt for another matrix to be entered
+    - "-" - subtract a matrix from the existing matrix. Will prompt for another matrix.
+    - "*" - multiply matrix by another matrix. Will prompt for another matrix. 
+    - "transpose" - transpose the current matrix and set the transposed matrix as the new current matrix
+    - "inverse" - inverse the current matrix and set the inverted matrix as the new current matrix
+    - "determinant" - display the determinant of the current matrix. Does not change current matrix
+    - "eigDecomp" - display the three matrices that make up the eigen decomposition of the current matrix. Does not change current matrix
+    - "display" - displays current matrix as a seaborn heatmap 
+    - "clear" - clear the current matrix. The program will prompt for a new one.
+    - "exit" - exit from the program
