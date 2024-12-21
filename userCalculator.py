@@ -49,42 +49,53 @@ def main():
     userInput = None
     matrix1 = None
 
-    #case switch contains all commands available to the calculator
-    while userInput != 'exit':
+    #exit program when exit is read as input
+    while userInput != 'exit': 
+        #case switch contains all commands available to the calculato
         match userInput:
             case '+':
                 try:
-                    userInput = input("enter a matrix to add:\n")
-                    matrix2 = matrixInputSequence(userInput)
-                    matrix1 = matrix1.addMatrix(matrix2)
-                    print("sum:\n", matrix1.getMatrix())
-                except:
-                    if matrix1 == None:
+                    if matrix1 != None:
+                        userInput = input("enter a matrix to add:\n")
+                        matrix2 = matrixInputSequence(userInput)
+                        #if a mediary matrix3 is not used, then a poor input will delete matrix1 with no replacement
+                        matrix3 = matrix1.addMatrix(matrix2)
+                        matrix1 = matrix3
+                        print("sum:\n", matrix1.getMatrix())
+                    else:
                         print('+ does not work as no matrix has been given')
+                except Exception as e:
+                    print(e)
             case '-':
                 try:
-                    userInput = input("enter a matrix to subtract:\n")
-                    matrix2 = matrixInputSequence(userInput)
-                    matrix1 = matrix1.subtractMatrix(matrix2)
-                    print("difference:\n", matrix1.getMatrix())
-                except:
-                    if matrix1 == None:
+                    if matrix1 != None:
+                        userInput = input("enter a matrix to subtract:\n")
+                        matrix2 = matrixInputSequence(userInput)
+                        matrix3 = matrix1.subtractMatrix(matrix2)
+                        matrix1 = matrix3
+                        print("difference:\n", matrix1.getMatrix())
+                    else:
                         print('- does not work as no matrix has been given')
+                except Exception as e:
+                    print(e)
             case '*':
                 try:
-                    userInput = input("enter a matrix to multiply by:\n")
-                    matrix2 = matrixInputSequence(userInput)
-                    matrix1 = matrix1.multiplyMatrix(matrix2)
-                    print("product-", end="")
-                except:
-                    if matrix1 == None:
+                    if matrix1 != None:
+                        userInput = input("enter a matrix to multiply by:\n")
+                        matrix2 = matrixInputSequence(userInput)
+                        matrix3 = matrix1.multiplyMatrix(matrix2) 
+                        matrix1 = matrix3
+                        print("product-", end="")
+                    else:
                         print('* does not work as no matrix has been given')
+                except Exception as e:
+                        print(e)
             case 'display':
                 try:
                     matrix1.toHeatMap()
                 except:
                     if matrix1 == None:
-                        print('transpose does not work as no matrix has been given')
+                        print('display does not work as no matrix has been given')
             case 'transpose':
                 try:
                     matrix1 = matrix1.transpose()
@@ -143,8 +154,7 @@ def main():
                         \n- determinant - display the determinant of matrix already given \
                         \n- eigDecomp - display the eigen decomposition matrices of matrix already given \
                         \n- display - show matrix already given in a seaborn heatmap")
-            case _:
-                print('command not recognized')
+
         #if a matrix is stored, ask what operations the user would like to perform on it
         if matrix1 != None: 
             print("formatted matrix:\n", matrix1.getMatrix())

@@ -1,6 +1,11 @@
 import unittest
 import matrix
+import userCalculator
+from unittest.mock import patch
+import io
+import sys
 
+#below testing is for the matrix.py file
 class TestMatrixMethods(unittest.TestCase):
 
     #checks that base constructor can run given clean parameters
@@ -119,8 +124,6 @@ class TestMatrixMethods(unittest.TestCase):
         while Rinverse == None:
             myMatrix1 = matrix.matrix.random(3, 3)
             R, D, Rinverse = myMatrix1.eigenDecomp()
-        print(myMatrix1.getMatrix())
-        print(R.multiplyMatrix(D.multiplyMatrix(Rinverse)).getMatrix())
         self.assertAlmostEqual(Rinverse.multiplyMatrix(R.multiplyMatrix(D)).getMatrix().all(), myMatrix1.getMatrix().all())
     
     #ValueError should be raised when non-zero matrix is passed to matrix.eigenDecomp
@@ -128,7 +131,56 @@ class TestMatrixMethods(unittest.TestCase):
         myMatrix1 = matrix.matrix.random(4,3)
         myMatrix1.eigenDecomp()
         self.assertRaises(ValueError)
+
+
+#below testing is for the userCalculator file
+class TestUserCalculator(unittest.TestCase):
+    #tests that testReadMatrixInput creates a list from a raw string correctly
+    def testReadMatrixInput(self):
+        myList = userCalculator.readMatrixInput('[[1,2,3],[5,4,3]]')
+        self.assertEqual(myList, [[1,2,3],[5,4,3]])
+
+    #given good input the user calculator should take and format the input to a matrix
+    #builtins.input mocks input
+    @patch('builtins.input', side_effect=['[[1],[2]]', 'exit'] )
+    #sys.stdout mocks print statements
+    @patch('sys.stdout', new_callable=io.StringIO)
+    def testUserInput(self, mock_stdout, mock_input):
+        userCalculator.main()
+        output = mock_stdout.getvalue().strip()
+        expected = "Type \"help\" to get a list of commands\n\nformatted matrix:\n [[1.]\n [2.]]"
+        self.assertEqual(output, expected)
     
+    #given bad input the user calculator should warn and ask again for input
+    @patch('builtins.input', side_effect=['[1,2,3]', 'exit'] )
+    @patch('sys.stdout', new_callable=io.StringIO)
+    def testIncorrectUserInput(self, mock_stdout, mock_input):
+        userCalculator.main()
+        output = mock_stdout.getvalue().strip()
+        expected = "Type \"help\" to get a list of commands\n\nlist not recognized\nlist not recognized"
+        self.assertEqual(output, expected)
+    
+    #when given a command to multiply before any matrix a warning print message should appear
+    @patch('builtins.input', side_effect=['*', 'exit'] )
+    @patch('sys.stdout', new_callable=io.StringIO)
+    def testPrematureUserInput(self, mock_stdout, mock_input):
+        userCalculator.main()
+        output = mock_stdout.getvalue().strip()
+        expected = "Type \"help\" to get a list of commands\n\nlist not recognized\n* does not work as "\
+        "no matrix has been given\nlist not recognized"
+        self.assertEqual(output, expected)
+    
+    #cases that only have one matrix object have a different error catch to test
+    @patch('builtins.input', side_effect=['transpose', 'exit'] )
+    @patch('sys.stdout', new_callable=io.StringIO)
+    def testPrematureUserInput2(self, mock_stdout, mock_input):
+        userCalculator.main()
+        output = mock_stdout.getvalue().strip()
+        expected = "Type \"help\" to get a list of commands\n\nlist not recognized\ntranspose does not work as "\
+        "no matrix has been given\nlist not recognized"
+        self.assertEqual(output, expected)
+    
+
 
 if __name__ == "__main__":
     unittest.main()
