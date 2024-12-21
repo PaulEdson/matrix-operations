@@ -53,6 +53,7 @@ def main():
     while userInput != 'exit': 
         #case switch contains all commands available to the calculato
         match userInput:
+            
             case '+':
                 try:
                     if matrix1 != None:
@@ -66,6 +67,7 @@ def main():
                         print('+ does not work as no matrix has been given')
                 except Exception as e:
                     print(e)
+
             case '-':
                 try:
                     if matrix1 != None:
@@ -78,6 +80,7 @@ def main():
                         print('- does not work as no matrix has been given')
                 except Exception as e:
                     print(e)
+
             case '*':
                 try:
                     if matrix1 != None:
@@ -90,12 +93,14 @@ def main():
                         print('* does not work as no matrix has been given')
                 except Exception as e:
                         print(e)
+
             case 'display':
                 try:
                     matrix1.toHeatMap()
                 except:
                     if matrix1 == None:
                         print('display does not work as no matrix has been given')
+
             case 'transpose':
                 try:
                     matrix1 = matrix1.transpose()
