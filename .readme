@@ -7,11 +7,12 @@ Matrix manager structure:
 
 Running the code:
 -To run this code, run the userCalculator.py script. 
+-matplotlib and seaborn must be installed for the userCalculator.py script to run
 
 Using the app:
 -after running the code, you will be asked to enter a matrix
 -type "help" for a list of all commands
--matrices can be entered as 2d lists in the command line or as a file eg. [[1,2,3],[1,4,5],[5,5,5]] or matrixFile.txt
+-matrices can be entered as 2d lists in the command line or as a text file in the same format eg. [[1,2,3],[1,4,5],[5,5,5]] or matrixFile.txt
 -if entered as a file, run the command from the directory the file is in, or provide the path
 -saved matrices are stored in a file called savedMatrix.txt in the directory you run the program from
 
